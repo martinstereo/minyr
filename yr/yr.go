@@ -1,10 +1,5 @@
 package yr
 
-import (
-	"fmt"
-)
+func ReplaceCelsiusInFile(input string) string {
 
-func main() {
-	fmt.Println("Hello World")
-	//Funksjon
 }

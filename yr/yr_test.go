@@ -1,27 +1,25 @@
-package yr_test
+package yr
 
 import "testing"
 
-func TestYr(t *testing.T) {
+func TestReplaceCelsiusInFile(t *testing.T) {
 
 	//input og resultat ønsket
 	type test struct {
-		input int
-		want  int
+		input string
+		want  string
 	}
 
 	var tests = []test{
-		{input  , want },
-		{1, 1},
-		{2, 1},
-		{3, 2},
+		{input: "Kjevik;SN39040;18.03.2023 00:20;4", want: "Kjevik;SN39040;18.03.2023 00:20;39.2"}, // Celsius to Fahr
+		{input: "Kjevik;SN39040;17.03.2023 18:50;3", want: "Kjevik;SN39040;17.03.2023 18:50;37.4"},
 		// .... flere tester
 	}
 	for _, tc := range tests {
-		got := .....(tc.input)
+		got := ReplaceCelsiusInFile(tc.input)
 
 		if got != tc.want {
-			t.Errorf("%d: want %d, got %d,", tc.input, tc.want, got)
+			t.Errorf("%s: want %s, got %s,", tc.input, tc.want, got)
 		}
 	}
 }
