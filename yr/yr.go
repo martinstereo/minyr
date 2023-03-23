@@ -109,3 +109,67 @@ func AverageTemp(filename string) string {
 
 	return result
 }
+
+func ConvertFile(inputFile string) {
+	fmt.Println("Konverterer alle målingene gitt i grader Celsius til grader Fahrenheit.")
+	// Open file
+	file, err := os.Open(inputFile) // For read access.
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close() //closes file
+
+	//open new file, give read write access
+	outputFile, err := os.OpenFile("kjevik-temp-fahr-20220318-20230318.csv", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer outputFile.Close() // closes output file
+	//create scanner
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		//create output file for fahr
+		// create writer
+		writer := bufio.NewWriter(outputFile)
+
+		// only convert lines with data that need change
+		if strings.Contains(line, "Navn") {
+			writer.WriteString(line + "\n")
+		} else if strings.Contains(line, "Kjevik;") {
+			writer.WriteString(ConvertCelsiusToFahr(line) + "\n")
+		} else if strings.Contains(line, "Data") {
+			writer.WriteString(EditEndLine(line) + "\n") // adds "endring gjort av Martin" to last line
+		}
+		// flush
+		writer.Flush()
+	}
+}
+
+func AverageTempOfFile(file string) {
+	fmt.Println("Venligst velg mellom celsius eller fahrenheit: c / f")
+	var input string
+	scanner := bufio.NewScanner(os.Stdin)
+
+	for scanner.Scan() {
+		input = scanner.Text()
+		avgCelsius := AverageTemp(file)
+		// give user ability to exit
+		if input == "q" || input == "exit" {
+			fmt.Println("exit")
+			os.Exit(0)
+
+		} else if input == "c" { // celsius
+			fmt.Printf("average celsius temperature of period is %v°C\n", avgCelsius)
+
+		} else if input == "f" { // fahrenheit
+			//convert to float before converting to fahrenheit
+			celsiusFloat, err := strconv.ParseFloat(avgCelsius, 64)
+			if err != nil {
+				log.Fatal(err)
+			}
+			avgFahr := conv.CelsiusToFahrenheit(celsiusFloat)
+			fmt.Printf("Average temperature of period in file is %.2f°F\n", avgFahr)
+		}
+	}
+}
