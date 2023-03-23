@@ -64,7 +64,7 @@ func ConvertCelsiusToFahr(inputLine string) string {
 	return convertedString
 }
 
-// Function that adds name of editor of file (me, Martin)
+// Function that adds name of editor of file to last line of specific file (me, Martin)
 func EditEndLine(lastLine string) string {
 	lineArray := strings.Split(lastLine, ";")
 	copyright := lineArray[0]

@@ -46,13 +46,13 @@ func main() {
 							log.Fatal(err)
 						}
 						convertFile()
-						fmt.Println("Created file. Amount of lines: ", yr.CountLines("kjevik-temp-fahr-20220318-20230318.csv"))
+						fmt.Printf("Created file. wrote %v lines.\n", yr.CountLines("kjevik-temp-fahr-20220318-20230318.csv"))
 						os.Exit(0)
 					}
 				}
 			} else {
 				convertFile()
-				fmt.Println("Created file. Amount of lines: ", yr.CountLines("kjevik-temp-fahr-20220318-20230318.csv"))
+				fmt.Printf("Created file. wrote %v lines.\n", yr.CountLines("kjevik-temp-fahr-20220318-20230318.csv"))
 				os.Exit(0)
 			}
 			// averages the temp of file
@@ -71,6 +71,7 @@ func convertFile() {
 	}
 	defer file.Close() //closes file
 
+	//open new file, give read write access
 	outputFile, err := os.OpenFile("kjevik-temp-fahr-20220318-20230318.csv", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatal(err)
@@ -85,12 +86,13 @@ func convertFile() {
 		// create writer
 		writer := bufio.NewWriter(outputFile)
 
+		// only convert lines with data that need change
 		if strings.Contains(line, "Navn") {
 			writer.WriteString(line + "\n")
 		} else if strings.Contains(line, "Kjevik;") {
 			writer.WriteString(yr.ConvertCelsiusToFahr(line) + "\n")
 		} else if strings.Contains(line, "Data") {
-			writer.WriteString(yr.EditEndLine(line) + "\n")
+			writer.WriteString(yr.EditEndLine(line) + "\n") // adds "endring gjort av Martin" to last line
 		}
 		// flush
 		writer.Flush()
@@ -114,7 +116,7 @@ func averageTemp() {
 			fmt.Printf("average celsius temperature of period is %v°C\n", avgCelsius)
 
 		} else if input == "f" { // fahrenheit
-			//convert to float before converting
+			//convert to float before converting to fahrenheit
 			celsiusFloat, err := strconv.ParseFloat(avgCelsius, 64)
 			if err != nil {
 				log.Fatal(err)

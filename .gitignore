@@ -9,7 +9,7 @@
 
 # But not these files...
 !/.gitignore
-!*.csv
+!kjevik-temp-celsius-20220318-20230318.csv
 
 !*.go
 !go.sum
