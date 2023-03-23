@@ -88,27 +88,24 @@ func AverageTemp(filename string) string {
 
 	scanner := bufio.NewScanner(file) // create scanner from bufio package
 	countedLines := 0                 // intitale variable with amount of lines
-	totalTemp := 0.0
-	for scanner.Scan() { // scan each line for content
-
+	totalTemp := 0.0                  // variable for total temperature added up
+	for scanner.Scan() {              // scan each line for content
 		line := scanner.Text()
 		// check if line contains the data
 		if strings.Contains(line, "Kjevik;") {
-			//take out temp data out of line
+			//take out temperature data out of line
 			dataArray := strings.Split(line, ";")
 			temp := dataArray[3]
-			tempFloat, err := strconv.ParseFloat(temp, 64)
+			tempFloat, err := strconv.ParseFloat(temp, 64) //convert data to float - orignally a string
 			if err != nil {
 				log.Fatal(err)
 			}
-			totalTemp = totalTemp + tempFloat
-			countedLines++
+			totalTemp = totalTemp + tempFloat // add together
+			countedLines++                    // keeping count of lines of data
 		}
-
 	}
-	average := totalTemp / float64(countedLines)
-
-	result := fmt.Sprintf("%.2f", average)
+	average := totalTemp / float64(countedLines) // calculate average by dividing total temp by counted lines of data
+	result := fmt.Sprintf("%.2f", average)       // and turn to string with 2 decimal format
 
 	return result
 }

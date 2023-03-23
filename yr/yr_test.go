@@ -24,7 +24,7 @@ func TestCountLines(t *testing.T) {
 	}
 
 	var tests = []test{
-		{input: "test-kjevik-temp-celsius-20220318-20230318.csv",
+		{input: "../kjevik-temp-celsius-20220318-20230318.csv",
 			want: 16756},
 	}
 	for _, tc := range tests {
@@ -85,7 +85,7 @@ func TestAverageTemp(t *testing.T) {
 	}
 
 	var tests = []test{
-		{input: "test-kjevik-temp-celsius-20220318-20230318.csv",
+		{input: "../kjevik-temp-celsius-20220318-20230318.csv",
 			want: "8.56"},
 	}
 	for _, tc := range tests {
