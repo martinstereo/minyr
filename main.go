@@ -2,116 +2,66 @@ package main
 
 import (
 	"bufio"
-	"encoding/csv"
 	"fmt"
-	"io"
 	"log"
 	"os"
-	"strconv"
 
-	"github.com/naausicaa/funtemps/conv" // Pakke som konverterer celsius, fahr og kelvin
+	"github.com/naausicaa/minyr/yr"
 )
 
-type yr struct {
-	navn    string
-	stasjon string
-	tid     string
-	celsius float64
-}
-
 func main() {
+	fmt.Println("Venligst velg convert, average eller exit:")
+	var input string
+	scanner := bufio.NewScanner(os.Stdin)
 
-	// Open file
-	file, err := os.Open("kjevik-temp-celsius-20220318-20230318.csv") // For read access.
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close() //closes file
+	for scanner.Scan() {
+		input = scanner.Text()
+		if input == "q" || input == "exit" {
+			fmt.Println("exit")
+			os.Exit(0)
 
-	reader := csv.NewReader(bufio.NewReader(file))
-	//discard header
-	//_, err = reader.Read()
-	if err != nil {
-		log.Fatal(err)
-	}
-	reader.Comma = ';' // change Comma to the delimiter in the file
-	for {
-		row, err := reader.Read()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			log.Fatal(err)
-		}
+			// Convert file
+		} else if input == "convert" {
+			// funksjon som gjør åpner fil, leser linjer, gjør endringer og lagrer nye linjer i en ny fil
+			fmt.Println("Konverterer alle målingene gitt i grader Celsius til grader Fahrenheit.")
+			// Open file
+			file, err := os.Open("kjevik-temp-celsius-20220318-20230318.csv") // For read access.
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer file.Close() //closes file
 
-		// turn to int
-		celsiusFloat, err := strconv.ParseFloat(row[3], 64) // ROW 3 is for celsius / temp
-		if err != nil {
-			fmt.Println(err)
-		}
-		conv.CelsiusToFahrenheit(celsiusFloat)
+			//create scanner
+			scanner := bufio.NewScanner(file)
+			scanner.Scan() // move to next token before loop to skip first line
+			for scanner.Scan() {
+				line := scanner.Text()
+				fmt.Println(yr.ConvertCelsiusToFahr(line))
+			}
+			if err != nil {
+				log.Fatal(err)
+			}
 
-		fmt.Println(row[3])
-
-		// Create new fahrenheit file
-		/*
-			os.WriteFile("kjevik-temp-fahrenheit-20220318-20230318.csv", []byte(row[3]), 0666)
+			/*
+				//create new file
+				outputFile, err := os.Create("kjevik-temp-fahr-20220318-20230318.csv") //create output file for fahr
 				if err != nil {
 					log.Fatal(err)
 				}
-			}
-		*/
-		/*
-			// Create a buffered reader for the file
-			reader := bufio.NewReader(file)
-
-			// Read text file line by line
-			for {
-				line, err := reader.ReadString('\n')
-				strings.Split(line, ";")
+				//close new file
+				defer outputFile.Close() // closes output file
 				if err != nil {
-					break // reached end of file
+					log.Fatal(err)
 				}
-				fmt.Println(line)
-			}
-		*/
 
-		/*
-			var input string
-			scanner := bufio.NewScanner(os.Stdin)
+				//writer := bufio.NewWriter(outputFile)
 
-			for scanner.Scan() {
-			    input = scanner.Text()
-			    if input == "q" || input == "exit" {
-			        fmt.Println("exit")
-			        os.Exit(0)
-			    } else if input == "convert" {
-			        fmt.Println("Konverterer alle målingene gitt i grader Celsius til grader Fahrenheit.")
-			        // funksjon som gjor aapner fil, leser linjer, gjor endringer og lagrer nye linjer i en ny fil
+			*/
 
-			    // flere else-if setninger
-			    } else {
-			        fmt.Println("Venligst velg convert, average eller exit:")
-
-			    }
-
-			}
-		*/
-		// counts the amount of lines in the file
-
-		/*
-			scanner := bufio.NewScanner(file)
-			counter := 0
-			for scanner.Scan() {
-				line := scanner.Text()
-				if line != "" {
-					counter++
-				}
-			}
-			fmt.Println("total lines:", counter)
-		*/
-
-		//fahr := conv.CelsiusToFahrenheit(100)
-		//fmt.Println("100C til F Er", fahr)
+			// averages the temp of file
+		} else if input == "average" {
+			avg := yr.AverageTemp("kjevik-temp-celsius-20220318-20230318.csv")
+			fmt.Println("average celsius temperature of period is ", avg)
+		}
 	}
 }

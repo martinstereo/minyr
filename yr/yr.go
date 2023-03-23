@@ -2,6 +2,7 @@ package yr
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -75,4 +76,39 @@ func EditEndLine(lastLine string) string {
 	convertedEndLine := strings.Trim(strings.Join(newEndLine, ";"), "[]{}")
 
 	return convertedEndLine
+}
+
+// function that calculates average temperature of period of file as a string
+func AverageTemp(filename string) string {
+	file, err := os.Open(filename) // For read access.
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close() //closes file
+
+	scanner := bufio.NewScanner(file) // create scanner from bufio package
+	countedLines := 0                 // intitale variable with amount of lines
+	totalTemp := 0.0
+	for scanner.Scan() { // scan each line for content
+
+		line := scanner.Text()
+		// check if line contains the data
+		if strings.Contains(line, "Kjevik;") {
+			//take out temp data out of line
+			dataArray := strings.Split(line, ";")
+			temp := dataArray[3]
+			tempFloat, err := strconv.ParseFloat(temp, 64)
+			if err != nil {
+				log.Fatal(err)
+			}
+			totalTemp = totalTemp + tempFloat
+			countedLines++
+		}
+
+	}
+	average := totalTemp / float64(countedLines)
+
+	result := fmt.Sprintf("%.2f", average)
+
+	return result
 }
