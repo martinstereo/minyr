@@ -41,10 +41,12 @@ func main() {
 						// if yes - overwrite file
 					} else if input == "y" || input == "yes" {
 						convertFile()
+						os.Exit(0)
 					}
 				}
 			} else {
 				convertFile()
+				os.Exit(0)
 			}
 			// averages the temp of file
 		} else if input == "average" {
