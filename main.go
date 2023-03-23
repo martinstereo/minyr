@@ -71,18 +71,17 @@ func convertFile() {
 	}
 	defer file.Close() //closes file
 
+	outputFile, err := os.OpenFile("kjevik-temp-fahr-20220318-20230318.csv", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// close new file
+	defer outputFile.Close() // closes output file
 	//create scanner
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
 		//create output file for fahr
-		outputFile, err := os.OpenFile("kjevik-temp-fahr-20220318-20230318.csv", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
-		if err != nil {
-			log.Fatal(err)
-		}
-		// close new file
-		defer outputFile.Close() // closes output file
-
 		// create writer
 		writer := bufio.NewWriter(outputFile)
 
