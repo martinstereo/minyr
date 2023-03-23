@@ -13,7 +13,7 @@ import (
 )
 
 // function that counts the amout of lines in a file
-func countLines(filename string) int {
+func CountLines(filename string) int {
 	file, err := os.Open(filename) // open file
 	if err != nil {
 		log.Fatal(err)

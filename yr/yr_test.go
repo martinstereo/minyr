@@ -28,7 +28,7 @@ func TestCountLines(t *testing.T) {
 			want: 16756},
 	}
 	for _, tc := range tests {
-		got := countLines(tc.input)
+		got := CountLines(tc.input)
 
 		if got != tc.want {
 			t.Errorf("%v: want %v, got %v,", tc.input, tc.want, got)
