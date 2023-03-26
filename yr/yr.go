@@ -159,17 +159,78 @@ func AverageTempOfFile(file string) {
 			fmt.Println("exit")
 			os.Exit(0)
 
-		} else if input == "c" { // celsius
-			fmt.Printf("average celsius temperature of period is %v°C\n", avgCelsius)
+		} else if input == "c" || input == "C" { // celsius
+			fmt.Printf("average Celsius temperature of period in file is %v°C\n", avgCelsius)
 
-		} else if input == "f" { // fahrenheit
+		} else if input == "f" || input == "F" { // fahrenheit
 			//convert to float before converting to fahrenheit
 			celsiusFloat, err := strconv.ParseFloat(avgCelsius, 64)
 			if err != nil {
 				log.Fatal(err)
 			}
 			avgFahr := conv.CelsiusToFahrenheit(celsiusFloat)
-			fmt.Printf("Average temperature of period in file is %.2f°F\n", avgFahr)
+			fmt.Printf("Average Fahrenheit temperature of period in file is %.2f°F\n", avgFahr)
 		}
 	}
 }
+
+/*
+EKSTRA (ikke obligatorisk):
+* Programmet skal kunne returnere gjennomsnitstemperatur for månedene april 2022 til februar 2023.
+Input fra brukeren må da være 'avge YEAR MONTH",
+hvor YEAR er enten 2022 eller 2023 og MONTH er en av årets månedensnavn
+(unntatt mars, siden det finnes ikke en fullstendig
+	mengde av målinger hverken for mars 2022 eller mars 2023 i filen)
+skrevet med små bokstaver og på norsk, for eksempel 'avge 2022 desember' vil skrive ut gjennomsnittlig temperatur
+(beregnet basert på halvtimes verdier) for desember 2022
+*/
+
+/*
+func AverageMonthTemp(input string) string {
+	// Åpne fil
+	// sjekke input om hvilket år eller måned det inneholder, splitte opp til array feks
+	// Skrive sjekker for hver mulighet
+	// Regn ut gjennomsnittstemp
+
+	return CalculateAverageTempOfMonth("04", "2022")
+}
+*/
+
+/*
+func CalculateAverageTempOfMonth(month, year string) string {
+	// create struct for each month
+
+	// open file
+	file, err := os.Open("../kjevik-temp-celsius-20220318-20230318.csv") // For read access.
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close() //closes file
+
+	scanner := bufio.NewScanner(file) // create scanner from bufio package
+	countedLines := 0                 // intitale variable with amount of lines
+	totalTemp := 0.0                  // variable for total temperature added up
+	for scanner.Scan() {              // scan each line for content
+		line := scanner.Text()
+		// check if line contains the data
+		if strings.Contains(line, "Kjevik;") {
+			//take out temperature data out of line
+			dataArray := strings.Split(line, ";")
+			date := dataArray[2]
+			temp := dataArray[3]
+			if strings.Contains(date, month+year) {
+				tempFloat, err := strconv.ParseFloat(temp, 64) //convert data to float - orignally a string
+				if err != nil {
+					log.Fatal(err)
+				}
+				totalTemp = totalTemp + tempFloat // add together
+				countedLines++                    // keeping count of lines of data
+			}
+		}
+	}
+	average := totalTemp / float64(countedLines) // calculate average by dividing total temp by counted lines of data
+	result := fmt.Sprintf("%.2f", average)       // and turn to string with 2 decimal format
+
+	return result
+}
+*/
