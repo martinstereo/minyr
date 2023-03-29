@@ -96,3 +96,22 @@ func TestAverageTemp(t *testing.T) {
 		}
 	}
 }
+
+func TestAverageMonthTemp(t *testing.T) {
+	type test struct {
+		input string
+		want  string
+	}
+
+	var tests = []test{
+		{input: "avge 2022 april",
+			want: "something"},
+	}
+	for _, tc := range tests {
+		got := AverageMonthTemp(tc.input)
+
+		if got != tc.want {
+			t.Errorf("%v: want %v, got %v,", tc.input, tc.want, got)
+		}
+	}
+}
