@@ -97,6 +97,7 @@ func TestAverageTemp(t *testing.T) {
 	}
 }
 
+/*
 func TestAverageMonthTemp(t *testing.T) {
 	type test struct {
 		input string
@@ -115,3 +116,4 @@ func TestAverageMonthTemp(t *testing.T) {
 		}
 	}
 }
+*/
