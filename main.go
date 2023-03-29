@@ -50,13 +50,11 @@ func main() {
 						}
 						yr.ConvertFile(inputFile)
 						fmt.Printf("Lagde fil. Skrev %v linjer.\n", yr.CountLines(outputFile))
-						os.Exit(0)
 					}
 				}
 			} else {
 				yr.ConvertFile(inputFile)
 				fmt.Printf("Lagde fil. Skrev %v linjer.\n", yr.CountLines(outputFile))
-				os.Exit(0)
 			}
 			// averages the temp of file
 		} else if input == "average" {
