@@ -49,18 +49,21 @@ func main() {
 							log.Fatal(err)
 						}
 						yr.ConvertFile(inputFile)
-						fmt.Printf("Created file. wrote %v lines.\n", yr.CountLines(outputFile))
+						fmt.Printf("Lagde fil. Skrev %v linjer.\n", yr.CountLines(outputFile))
 						os.Exit(0)
 					}
 				}
 			} else {
 				yr.ConvertFile(inputFile)
-				fmt.Printf("Created file. wrote %v lines.\n", yr.CountLines(outputFile))
+				fmt.Printf("Lagde fil. Skrev %v linjer.\n", yr.CountLines(outputFile))
 				os.Exit(0)
 			}
 			// averages the temp of file
 		} else if input == "average" {
 			yr.AverageTempOfFile(inputFile)
+		} else {
+			fmt.Println("Ugyldig kommando...")
 		}
 	}
+
 }
